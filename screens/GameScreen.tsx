@@ -16,7 +16,7 @@ function GameScreen({ number, setNumber }: GameScreenProps) {
   return (
     <View style={styles.game}>
       <View style={styles.guessBox}>
-        <Text>Guess: {guess}</Text>
+        <Text style={styles.guess}>Guess: {guess}</Text>
       </View>
       <View style={styles.hintsBox}>
         <Button
@@ -36,7 +36,7 @@ function GameScreen({ number, setNumber }: GameScreenProps) {
           text="Back"
           onPress={back}
           style={styles.actionBtn}
-          textStyle={{ color: "white" }}
+          textStyle={{ color: "white", fontSize: 15 }}
         />
       </View>
     </View>
@@ -47,7 +47,8 @@ const styles = StyleSheet.create({
   game: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "stretch",
+    paddingTop: 50,
   },
   number: {
     flex: 1,
@@ -57,6 +58,20 @@ const styles = StyleSheet.create({
   },
   guessBox: {
     flex: 1,
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
+  guess: {
+    width: "50%",
+    backgroundColor: s.golden,
+    color: s.backgroundDark,
+    fontSize: 20,
+    fontWeight: "500",
+
+    textAlign: "center",
+    paddingVertical: 5,
+
+    borderRadius: 5,
   },
   hintsBox: {
     flex: 1,
@@ -69,6 +84,7 @@ const styles = StyleSheet.create({
   },
   hintBtnText: {
     color: s.yellow,
+    fontSize: 15,
     fontWeight: "600",
   },
   space: {
@@ -82,7 +98,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   actionBtn: {
-    flex: 1,
+    width: "50%",
     backgroundColor: "red",
   },
 });
