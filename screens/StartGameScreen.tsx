@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RN, {
   TextInput,
   View,
@@ -10,7 +10,7 @@ import RN, {
   Alert,
 } from "react-native";
 
-import s from "../styles";
+import { Colors } from "../styles";
 import Button from "../components/Button";
 
 interface StartGameScreenProps {
@@ -33,7 +33,7 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
   };
 
   const reset = () => {
-    if (number == "0") setNumber("0");
+    if (Number.parseInt(number) >= 0) setNumber("0");
     else setNumber("");
   };
 
@@ -47,6 +47,8 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
       ]);
     }
   };
+
+  useEffect(() => {});
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -64,15 +66,17 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
           />
           <View style={styles.btnBox}>
             <Button
-              text="Reset"
               style={styles.btn}
               pressedStyle={styles.btnPressed}
               onPress={reset}
-            />
-            <Button text="Confirm" style={styles.btn} onPress={submitNumber} />
+            >
+              Reset
+            </Button>
+            <Button style={styles.btn} onPress={submitNumber}>
+              Confirm
+            </Button>
           </View>
         </View>
-        <Text>{number}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -82,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
+    marginTop: "2%",
   },
   inputBox: {
     height: "20%",
@@ -89,22 +94,22 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: "center",
     justifyContent: "space-evenly",
-    backgroundColor: s.backgroundDark,
+    backgroundColor: Colors.backgroundDark,
     borderRadius: 10,
     // shadow effect
     elevation: 10,
-    shadowColor: s.black,
+    shadowColor: Colors.black,
     shadowOffset: { width: 2, height: 4 },
     shadowRadius: 4,
     shadowOpacity: 0.5,
   },
   numberInput: {
-    minWidth: Dimensions.get("window").width * 0.2,
+    minWidth: 50,
     height: 52,
-    color: s.golden,
+    color: Colors.golden,
     fontSize: 32,
     fontWeight: "bold",
-    borderBottomColor: s.golden,
+    borderBottomColor: Colors.golden,
     borderBottomWidth: 3,
     textAlign: "center",
   },
@@ -119,10 +124,10 @@ const styles = StyleSheet.create({
   },
   btn: {
     flex: 1,
-    backgroundColor: s.background,
+    backgroundColor: Colors.background,
   },
   btnPressed: {
-    backgroundColor: s.backgroundLight,
+    backgroundColor: Colors.backgroundLight,
   },
 });
 

@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import RN, { Pressable, Text, StyleSheet, View } from "react-native";
 
-import s from "../styles";
+import { Colors } from "../styles";
 
 interface ButtonProps {
-  text: string;
+  children?: React.ReactNode;
   style?: RN.StyleProp<RN.ViewStyle>;
   textStyle?: RN.StyleProp<RN.TextStyle>;
   pressedStyle?: RN.StyleProp<RN.ViewStyle>;
+  disabled?: boolean;
   onPress?: (e: RN.GestureResponderEvent) => void;
 }
 
 function Button({
-  text,
+  children,
   onPress,
+  disabled,
   style,
   textStyle,
   pressedStyle,
@@ -26,8 +28,9 @@ function Button({
           pressed && [styles.btnPressed, pressedStyle],
         ]}
         onPress={onPress}
+        disabled={disabled}
       >
-        <Text style={[styles.btnText, textStyle]}>{text}</Text>
+        <Text style={[styles.btnText, textStyle]}>{children}</Text>
       </Pressable>
     </View>
   );
@@ -39,6 +42,7 @@ const styles = StyleSheet.create({
     margin: 4,
     elevation: 2,
     overflow: "hidden",
+    backgroundColor: Colors.background,
   },
   btnInner: {
     paddingVertical: 8,
@@ -49,7 +53,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   btnText: {
-    color: s.white,
+    color: Colors.white,
     fontWeight: "500",
     textAlign: "center",
     fontSize: 14,
