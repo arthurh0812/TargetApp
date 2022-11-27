@@ -8,17 +8,17 @@ import { Colors, Fonts } from "../styles";
 type GameScreenProps = {
   number: number;
   setNumber: React.Dispatch<React.SetStateAction<number>>;
+  setScreen: React.Dispatch<React.SetStateAction<JSX.Element>>;
   setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-let lowerBounds = 1;
-let upperBounds = 100;
-
 function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
+  const [lowerBounds, setLowerBounds] = useState(1);
+  const [upperBounds, setUpperBounds] = useState(100);
   const back = () => {
     setNumber(0);
-    lowerBounds = 1;
-    upperBounds = 100;
+    setLowerBounds(1);
+    setUpperBounds(100);
   };
 
   const generateGuess = (
@@ -27,7 +27,6 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
     exclude?: number
   ): number => {
     let range = max - min;
-    console.log(range);
     let num = Math.floor(Math.random() * range + min);
     if (num != 0 && num == exclude) return generateGuess(min, max, exclude);
     return num;
@@ -39,17 +38,17 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
 
   const onHigher = () => {
     if (guess > number) return; // detect lie
-    lowerBounds = guess + 1;
-    updateGuess();
+    setLowerBounds(guess + 1);
+    updateGuess(guess + 1, upperBounds);
   };
 
   const onLower = () => {
     if (guess < number) return; // detect lie
-    upperBounds = guess;
-    updateGuess();
+    setUpperBounds(guess);
+    updateGuess(lowerBounds, guess);
   };
 
-  const updateGuess = () => {
+  const updateGuess = (lowerBounds: number, upperBounds: number) => {
     let newGuess = generateGuess(lowerBounds, upperBounds);
     setGuess(newGuess);
   };
