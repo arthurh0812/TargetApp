@@ -1,6 +1,6 @@
 import { StyleSheet, ImageBackground, SafeAreaView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
@@ -13,7 +13,7 @@ export default function App() {
 
   let screen = <StartGameScreen setGameNumber={setGameNumber} />;
 
-  if (gameNumber) {
+  if (gameNumber && !isGameOver) {
     screen = (
       <GameScreen
         number={gameNumber}
@@ -22,7 +22,7 @@ export default function App() {
       />
     );
   }
-  if (isGameOver) {
+  if (gameNumber && isGameOver) {
     screen = (
       <GameOverScreen
         correctNumber={gameNumber}

@@ -12,6 +12,8 @@ import RN, {
 
 import { Colors } from "../styles";
 import Button from "../components/Button";
+import Title from "../components/Title";
+import Card from "../components/Card";
 
 interface StartGameScreenProps {
   setGameNumber: React.Dispatch<React.SetStateAction<number>>;
@@ -48,12 +50,11 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
     }
   };
 
-  useEffect(() => {});
-
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <View style={styles.inputBox}>
+        <Title style={styles.title}>Guess a Number</Title>
+        <Card>
           <TextInput
             style={styles.numberInput}
             onPressIn={onStartEditing}
@@ -76,7 +77,7 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
               Confirm
             </Button>
           </View>
-        </View>
+        </Card>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -87,21 +88,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     marginTop: "2%",
-  },
-  inputBox: {
-    height: "20%",
-    marginHorizontal: 16,
-    padding: 16,
     alignItems: "center",
-    justifyContent: "space-evenly",
-    backgroundColor: Colors.backgroundDark,
-    borderRadius: 10,
-    // shadow effect
-    elevation: 10,
-    shadowColor: Colors.black,
-    shadowOffset: { width: 2, height: 4 },
-    shadowRadius: 4,
-    shadowOpacity: 0.5,
+  },
+  title: {
+    marginBottom: 100,
+    paddingHorizontal: 20,
+    color: Colors.yellow,
+    borderColor: Colors.yellow,
   },
   numberInput: {
     minWidth: 50,

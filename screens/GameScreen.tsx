@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Button from "../components/Button";
 import Number from "../components/Number";
@@ -32,9 +32,12 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
     return num;
   };
 
-  let [guess, setGuess] = useState(
-    generateGuess(lowerBounds, upperBounds, number)
+  const initial = useMemo(
+    () => generateGuess(lowerBounds, upperBounds, number),
+    [number]
   );
+
+  let [guess, setGuess] = useState(initial);
 
   const onHigher = () => {
     if (guess > number) return; // detect lie
@@ -55,7 +58,7 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
 
   useEffect(() => {
     if (guess == number) setIsGameOver(true);
-  });
+  }, [guess, number]);
 
   return (
     <View style={styles.game}>
