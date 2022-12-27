@@ -1,24 +1,32 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 import Button from "../components/Button";
 import Number from "../components/Number";
+import GuessLog from "../components/GuessLog";
 import Title from "../components/Title";
 import { Colors, Fonts } from "../styles";
 
 type GameScreenProps = {
   number: number;
   setNumber: React.Dispatch<React.SetStateAction<number>>;
+  setNumGuesses: React.Dispatch<React.SetStateAction<number>>;
   setScreen: React.Dispatch<React.SetStateAction<JSX.Element>>;
   setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
+function GameScreen({
+  number,
+  setNumber,
+  setIsGameOver,
+  setNumGuesses,
+}: GameScreenProps) {
+  const [guesses, setGuesses] = useState<Array<number>>([]);
+
   const [lowerBounds, setLowerBounds] = useState(1);
   const [upperBounds, setUpperBounds] = useState(100);
   const back = () => {
     setNumber(0);
-    setLowerBounds(1);
-    setUpperBounds(100);
   };
 
   const generateGuess = (
@@ -29,6 +37,7 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
     let range = max - min;
     let num = Math.floor(Math.random() * range + min);
     if (num != 0 && num == exclude) return generateGuess(min, max, exclude);
+    setGuesses((prev) => [num, ...prev]);
     return num;
   };
 
@@ -57,8 +66,16 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
   };
 
   useEffect(() => {
-    if (guess == number) setIsGameOver(true);
+    if (guess == number) {
+      setIsGameOver(true);
+      setNumGuesses(guesses.length);
+    }
   }, [guess, number]);
+
+  useEffect(() => {
+    setLowerBounds(1);
+    setUpperBounds(100);
+  }, []); // only runs on first render
 
   return (
     <View style={styles.game}>
@@ -72,17 +89,35 @@ function GameScreen({ number, setNumber, setIsGameOver }: GameScreenProps) {
           textStyle={styles.hintBtnText}
           onPress={onHigher}
         >
-          Higher
+          <AntDesign
+            name="pluscircleo"
+            size={Fonts.mediumSize}
+            color={Colors.white}
+          />
         </Button>
         <Button
           style={styles.hintBtn}
           textStyle={styles.hintBtnText}
           onPress={onLower}
         >
-          Lower
+          <AntDesign
+            name="minuscircleo"
+            size={Fonts.mediumSize}
+            color={Colors.white}
+          />
         </Button>
       </View>
-      <View style={styles.space}></View>
+      <View style={styles.guessesBox}>
+        <FlatList
+          data={guesses}
+          renderItem={(data) => (
+            <GuessLog log={data.item} round={guesses.length - data.index} />
+          )}
+          keyExtractor={(item) => item.toString()}
+          contentContainerStyle={styles.guessesListContainer}
+          style={styles.guessesList}
+        ></FlatList>
+      </View>
       <View style={styles.actionsBox}>
         <Button
           onPress={back}
@@ -130,16 +165,26 @@ const styles = StyleSheet.create({
   },
   hintBtn: {
     backgroundColor: Colors.background,
+    width: "40%",
   },
   hintBtnText: {
     color: Colors.yellow,
     fontSize: Fonts.smallSize,
     fontWeight: "600",
   },
-  space: {
+  guessesBox: {
     flex: 4,
     justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "transparent",
+  },
+  guessesList: {
+    flex: 1,
+    width: "80%",
+  },
+  guessesListContainer: {
+    paddingVertical: 50,
+    paddingHorizontal: 20,
   },
   actionsBox: {
     flex: 1,

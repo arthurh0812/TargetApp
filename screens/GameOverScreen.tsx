@@ -1,11 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import Button from "../components/Button";
 import Title from "../components/Title";
 import { Fonts, Colors } from "../styles";
 
 type ScreenProps = {
   correctNumber: number;
+  numGuesses: number;
   setNumber: React.Dispatch<React.SetStateAction<number>>;
   setIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -21,10 +22,17 @@ function GameOverScreen(p: ScreenProps) {
       <View style={styles.space}></View>
       <View style={styles.info}>
         <Title style={styles.title}>Game Over</Title>
-        <View style={styles.numberContainer}>
-          <Text style={styles.number}>
-            Number:{" "}
-            <Text style={{ fontWeight: "bold" }}>{p.correctNumber}</Text>
+        <View style={styles.imageContainer}>
+          <Image
+            style={styles.image}
+            source={require("../assets/images/success.png")}
+          />
+        </View>
+        <View style={styles.summaryContainer}>
+          <Text style={styles.summary}>
+            I needed <Text style={styles.number}>{p.numGuesses} tries</Text> to
+            guess the number{" "}
+            <Text style={styles.number}>{p.correctNumber}</Text>
           </Text>
         </View>
       </View>
@@ -43,21 +51,39 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   space: {
-    flex: 3,
+    flex: 1,
   },
   info: {
-    flex: 2,
+    flex: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
+    width: "80%",
     backgroundColor: Colors.background,
     fontSize: Fonts.largeSize,
   },
-  numberContainer: {
+  imageContainer: {
+    borderRadius: 150,
+    width: 300,
+    height: 300,
+    marginTop: 20,
+    overflow: "hidden",
+    borderColor: Colors.background,
+    borderWidth: 3,
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
+  summaryContainer: {
+    width: "80%",
     marginVertical: "10%",
     alignItems: "center",
   },
-  number: {
-    width: "50%",
+  summary: {
+    width: "100%",
     textAlign: "center",
     fontSize: Fonts.mediumSize,
     color: Colors.white,
@@ -66,6 +92,10 @@ const styles = StyleSheet.create({
     borderColor: Colors.white,
     borderWidth: 2,
     overflow: "hidden",
+  },
+  number: {
+    color: Colors.background,
+    fontWeight: "bold",
   },
   actionsContainer: {
     flex: 2,
