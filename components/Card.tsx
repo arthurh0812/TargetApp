@@ -4,15 +4,15 @@ import { Colors } from "../styles";
 
 type CardProps = {
   children?: React.ReactNode;
+  height: number;
 };
 
-function Card({ children }: CardProps) {
-  return <View style={styles.inputBox}>{children}</View>;
+function Card({ children, height }: CardProps) {
+  return <View style={[styles.inputBox, { height: height }]}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
   inputBox: {
-    height: "20%",
     marginHorizontal: 16,
     padding: 16,
     alignItems: "center",

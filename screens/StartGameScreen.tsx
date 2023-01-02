@@ -4,10 +4,14 @@ import RN, {
   View,
   Text,
   StyleSheet,
+  ScrollView,
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
   Alert,
+  KeyboardAvoidingView,
+  useWindowDimensions,
+  Platform,
 } from "react-native";
 
 import { Colors } from "../styles";
@@ -50,44 +54,59 @@ function StartGameScreen({ setGameNumber }: StartGameScreenProps) {
     }
   };
 
+  let { width, height } = useWindowDimensions();
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <Title style={styles.title}>Guess a Number</Title>
-        <Card>
-          <TextInput
-            style={styles.numberInput}
-            onPressIn={onStartEditing}
-            onEndEditing={onEndEditing}
-            onChangeText={onChangeText}
-            maxLength={2}
-            keyboardType={"number-pad"}
-            value={number}
-            autoCorrect={false}
-          />
-          <View style={styles.btnBox}>
-            <Button
-              style={styles.btn}
-              pressedStyle={styles.btnPressed}
-              onPress={reset}
-            >
-              Reset
-            </Button>
-            <Button style={styles.btn} onPress={submitNumber}>
-              Confirm
-            </Button>
+      <ScrollView
+        style={styles.screen}
+        scrollEnabled={height < 400 ? true : false}
+      >
+        <KeyboardAvoidingView
+          style={styles.screen}
+          behavior={height < 400 ? "position" : "padding"}
+        >
+          <View
+            style={[styles.container, { marginTop: height < 400 ? 30 : 100 }]}
+          >
+            <Title style={styles.title}>Guess a Number</Title>
+            <Card height={height < 400 ? 150 : 200}>
+              <TextInput
+                style={styles.numberInput}
+                onPressIn={onStartEditing}
+                onEndEditing={onEndEditing}
+                onChangeText={onChangeText}
+                maxLength={2}
+                keyboardType={"number-pad"}
+                value={number}
+                autoCorrect={false}
+              />
+              <View style={styles.btnBox}>
+                <Button
+                  style={styles.btn}
+                  pressedStyle={styles.btnPressed}
+                  onPress={reset}
+                >
+                  Reset
+                </Button>
+                <Button style={styles.btn} onPress={submitNumber}>
+                  Confirm
+                </Button>
+              </View>
+            </Card>
           </View>
-        </Card>
-      </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    justifyContent: "center",
-    marginTop: "2%",
     alignItems: "center",
   },
   title: {

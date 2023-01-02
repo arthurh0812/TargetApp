@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { Dimensions, StyleSheet, Text } from "react-native";
 
 import { Colors, Fonts } from "../styles";
 
@@ -7,6 +7,8 @@ type NumberProps = {
   style?: object;
   children?: React.ReactNode;
 };
+
+const deviceWidth = Dimensions.get("window").width;
 
 function Number({ style, children }: NumberProps) {
   return <Text style={[styles.number, style]}>{children}</Text>;
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
 
     textAlign: "center",
-    paddingVertical: 5,
+    paddingVertical: deviceWidth < 400 ? 12 : 24,
 
     borderColor: Colors.white,
     borderWidth: 2,

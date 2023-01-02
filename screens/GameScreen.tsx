@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { AntDesign } from "@expo/vector-icons";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
 import Button from "../components/Button";
 import Number from "../components/Number";
 import GuessLog from "../components/GuessLog";
@@ -77,6 +83,37 @@ function GameScreen({
     setUpperBounds(100);
   }, []); // only runs on first render
 
+  let { width, height } = useWindowDimensions();
+
+  let content = <></>;
+
+  if (width < 500) {
+    content = (
+      <>
+        <View style={styles.guessesBox}>
+          <FlatList
+            data={guesses}
+            renderItem={(data) => (
+              <GuessLog log={data.item} round={guesses.length - data.index} />
+            )}
+            keyExtractor={(item) => item.toString()}
+            contentContainerStyle={styles.guessesListContainer}
+            style={styles.guessesList}
+          ></FlatList>
+        </View>
+        <View style={styles.actionsBox}>
+          <Button
+            onPress={back}
+            style={styles.actionBtn}
+            textStyle={{ color: "white", fontSize: 15 }}
+          >
+            Back
+          </Button>
+        </View>
+      </>
+    );
+  }
+
   return (
     <View style={styles.game}>
       <View style={styles.guessBox}>
@@ -107,26 +144,7 @@ function GameScreen({
           />
         </Button>
       </View>
-      <View style={styles.guessesBox}>
-        <FlatList
-          data={guesses}
-          renderItem={(data) => (
-            <GuessLog log={data.item} round={guesses.length - data.index} />
-          )}
-          keyExtractor={(item) => item.toString()}
-          contentContainerStyle={styles.guessesListContainer}
-          style={styles.guessesList}
-        ></FlatList>
-      </View>
-      <View style={styles.actionsBox}>
-        <Button
-          onPress={back}
-          style={styles.actionBtn}
-          textStyle={{ color: "white", fontSize: 15 }}
-        >
-          Back
-        </Button>
-      </View>
+      {content}
     </View>
   );
 }
@@ -150,7 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   guessTitle: {
-    width: "75%",
+    minWidth: "80%",
   },
   guess: {
     width: "50%",

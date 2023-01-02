@@ -1,5 +1,11 @@
 import React from "react";
-import { StyleSheet, View, Text, Image } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  Image,
+  useWindowDimensions,
+} from "react-native";
 import Button from "../components/Button";
 import Title from "../components/Title";
 import { Fonts, Colors } from "../styles";
@@ -17,17 +23,25 @@ function GameOverScreen(p: ScreenProps) {
     p.setNumber(0);
   };
 
+  let { width, height } = useWindowDimensions();
+
+  let content = <></>;
+  if (width < 500) {
+    content = (
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          source={require("../assets/images/success.png")}
+        />
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.space}></View>
       <View style={styles.info}>
         <Title style={styles.title}>Game Over</Title>
-        <View style={styles.imageContainer}>
-          <Image
-            style={styles.image}
-            source={require("../assets/images/success.png")}
-          />
-        </View>
+        {content}
         <View style={styles.summaryContainer}>
           <Text style={styles.summary}>
             I needed <Text style={styles.number}>{p.numGuesses} tries</Text> to
